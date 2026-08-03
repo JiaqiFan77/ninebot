@@ -1,473 +1,288 @@
-/* ========================================
-   基础
-======================================== */
-
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 html,
 body {
   width: 100%;
   min-height: 100%;
-}
-
-body {
   background: #000;
-  color: #fff;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
 }
 
-button {
+button,
+a {
   font: inherit;
 }
-
-img {
-  display: block;
-}
-
-/* ========================================
-   3D 首页
-======================================== */
 
 .archive-page {
   width: 100vw;
   height: 100vh;
-
   overflow: hidden;
-
-  background: #000;
 }
 
-#archive {
+.archive {
   position: relative;
-
-  width: 100vw;
-  height: 100vh;
-
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at 50% 48%,
-      #181818 0%,
-      #080808 42%,
-      #000 78%
-    );
-
   cursor: grab;
-
-  user-select: none;
   touch-action: none;
+  user-select: none;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(38, 38, 38, .56), rgba(8, 8, 8, .92) 46%, #000 82%);
 }
 
-#archive.is-dragging {
+.archive.is-dragging {
   cursor: grabbing;
 }
 
 #webgl {
   position: absolute;
   inset: 0;
-
+  display: block;
   width: 100%;
   height: 100%;
-
-  display: block;
-
-  outline: none;
 }
 
-/* ========================================
-   加载界面
-======================================== */
-
-.loading-screen {
+.loading {
   position: fixed;
   inset: 0;
-
-  z-index: 500;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  gap: 18px;
-
+  z-index: 50;
+  display: grid;
+  place-content: center;
+  gap: 16px;
   background: #000;
-
-  opacity: 1;
-  visibility: visible;
-
-  transition:
-    opacity 0.65s ease,
-    visibility 0.65s ease;
+  transition: opacity .55s ease, visibility .55s ease;
 }
 
-.loading-screen.is-hidden {
+.loading.is-hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.loading-text {
-  color: rgba(255, 255, 255, 0.65);
-
+.loading__label {
+  text-align: center;
+  color: rgba(255, 255, 255, .62);
   font-size: 10px;
-  letter-spacing: 0.22em;
+  letter-spacing: .22em;
 }
 
-.loading-line {
-  width: min(260px, 64vw);
+.loading__track {
+  width: min(280px, 66vw);
   height: 1px;
-
   overflow: hidden;
-
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, .18);
 }
 
-.loading-progress {
-  width: 0%;
+.loading__bar {
+  width: 0;
   height: 100%;
-
   background: #fff;
-
-  transition: width 0.25s ease;
+  transition: width .2s linear;
 }
 
-/* ========================================
-   首页界面
-======================================== */
-
-.archive-interface {
+.ui {
   position: absolute;
   inset: 0;
-
-  z-index: 20;
-
+  z-index: 10;
   pointer-events: none;
 }
 
-.archive-title {
+.ui__title {
   position: absolute;
-
   left: 28px;
   top: 26px;
-
-  color: rgba(255, 255, 255, 0.78);
-
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, .72);
+  font-size: 10px;
+  letter-spacing: .18em;
 }
 
-.archive-hint {
+.ui__hint {
   position: absolute;
-
   left: 50%;
   bottom: 24px;
-
   transform: translateX(-50%);
-
-  color: rgba(255, 255, 255, 0.48);
-
+  color: rgba(255, 255, 255, .46);
   font-size: 9px;
-  letter-spacing: 0.19em;
-
+  letter-spacing: .18em;
   white-space: nowrap;
-
-  transition: opacity 0.3s ease;
+  transition: opacity .25s ease;
 }
 
-#archive.has-selection .archive-hint {
+.archive.has-selection .ui__hint {
   opacity: 0;
 }
 
-/* ========================================
-   选中信息
-======================================== */
-
-.selected-information {
+.close {
   position: absolute;
-
-  left: 50%;
-  bottom: 25px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 7px;
-
-  transform:
-    translateX(-50%)
-    translateY(12px);
-
-  opacity: 0;
-  visibility: hidden;
-
-  transition:
-    opacity 0.35s ease,
-    visibility 0.35s ease,
-    transform 0.35s ease;
-}
-
-#archive.has-selection .selected-information {
-  opacity: 1;
-  visibility: visible;
-
-  transform:
-    translateX(-50%)
-    translateY(0);
-}
-
-#selectedIssue {
-  font-size: 11px;
-  letter-spacing: 0.17em;
-}
-
-.selected-action {
-  color: rgba(255, 255, 255, 0.5);
-
-  font-size: 8px;
-  letter-spacing: 0.16em;
-}
-
-/* ========================================
-   关闭按钮
-======================================== */
-
-.close-button {
-  position: absolute;
-
-  right: 28px;
+  right: 26px;
   top: 24px;
-
-  z-index: 40;
-
   width: 48px;
   height: 48px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.38);
-
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .38);
   border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, .42);
   color: #fff;
-
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
-
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.85);
-
+  font-size: 27px;
   cursor: pointer;
   pointer-events: auto;
-
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(.84);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  transition:
-    opacity 0.28s ease,
-    visibility 0.28s ease,
-    transform 0.28s ease,
-    background 0.22s ease,
-    color 0.22s ease;
+  transition: opacity .25s ease, visibility .25s ease, transform .25s ease, background .2s ease, color .2s ease;
 }
 
-#archive.has-selection .close-button {
+.archive.has-selection .close {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
 }
 
-.close-button:hover {
-  color: #000;
+.close:hover {
   background: #fff;
+  color: #000;
 }
 
-/* ========================================
-   内页长图页面
-======================================== */
+.selection-info {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  transform: translate(-50%, 10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease, transform .3s ease;
+}
 
+.archive.has-selection .selection-info {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.selection-info__issue {
+  font-size: 11px;
+  letter-spacing: .17em;
+}
+
+.selection-info__action {
+  color: rgba(255, 255, 255, .46);
+  font-size: 8px;
+  letter-spacing: .15em;
+}
+
+/* Issue 06 long-scroll page */
 .issue-page {
-  min-height: 100vh;
-
   overflow-x: hidden;
   overflow-y: auto;
-
   background: #000;
+  color: #fff;
 }
 
 .issue-header {
   position: fixed;
-
-  left: 0;
-  top: 0;
-
-  z-index: 100;
-
-  width: 100%;
+  inset: 0 0 auto 0;
+  z-index: 20;
   height: 72px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0 28px;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.92),
-      rgba(0, 0, 0, 0)
-    );
-
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .92), transparent);
   pointer-events: none;
 }
 
-.back-link {
+.back {
   width: 46px;
   height: 46px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.4);
-
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .4);
   border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.42);
+  background: rgba(0, 0, 0, .42);
   color: #fff;
-
-  font-size: 22px;
-
   text-decoration: none;
-
+  font-size: 22px;
   pointer-events: auto;
-
   backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-
-  transition:
-    color 0.22s ease,
-    background 0.22s ease,
-    transform 0.22s ease;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
 }
 
-.back-link:hover {
-  color: #000;
+.back:hover {
   background: #fff;
-
+  color: #000;
   transform: scale(1.06);
 }
 
-.issue-label {
-  color: rgba(255, 255, 255, 0.7);
-
+.issue-header__label {
+  color: rgba(255, 255, 255, .66);
   font-size: 10px;
-  letter-spacing: 0.18em;
+  letter-spacing: .18em;
 }
 
-.longform-reader {
+.reader {
   width: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  padding:
-    96px 0 80px;
+  padding: 94px 0 76px;
 }
 
-.reader-cover-section,
-.reader-page {
+.reader__item {
   width: min(94vw, 1600px);
-
   display: flex;
   justify-content: center;
+  margin-bottom: 26px;
 }
 
-.reader-cover-section {
-  min-height: calc(100vh - 130px);
-
-  align-items: center;
-
-  margin-bottom: 48px;
-}
-
-.reader-cover-section img {
+.reader__item img {
   max-width: 100%;
-  max-height: calc(100vh - 145px);
-
   width: auto;
   height: auto;
-
   object-fit: contain;
-
-  box-shadow:
-    0 30px 100px rgba(0, 0, 0, 0.72);
-}
-
-.reader-page {
-  margin-bottom: 28px;
-}
-
-.reader-page img {
-  max-width: 100%;
-
-  width: auto;
-  height: auto;
-
-  object-fit: contain;
-
   background: #111;
-
-  box-shadow:
-    0 26px 85px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 26px 86px rgba(0, 0, 0, .62);
 }
 
-.issue-footer {
-  padding: 80px 20px 25px;
+.reader__cover {
+  min-height: calc(100vh - 124px);
+  align-items: center;
+  margin-bottom: 46px;
+}
 
-  color: rgba(255, 255, 255, 0.38);
+.reader__cover img {
+  max-height: calc(100vh - 140px);
+}
 
+.reader__end {
+  padding: 70px 20px 20px;
+  color: rgba(255, 255, 255, .36);
   font-size: 9px;
-  letter-spacing: 0.19em;
+  letter-spacing: .18em;
 }
-
-/* ========================================
-   手机适配
-======================================== */
 
 @media (max-width: 800px) {
-  .archive-title {
+  .ui__title {
     left: 14px;
     top: 16px;
   }
 
-  .archive-hint {
-    bottom: 17px;
-  }
-
-  .close-button {
+  .close {
     right: 12px;
     top: 12px;
-
     width: 44px;
     height: 44px;
   }
@@ -477,37 +292,31 @@ img {
     padding: 0 12px;
   }
 
-  .back-link {
+  .back {
     width: 42px;
     height: 42px;
   }
 
-  .longform-reader {
-    padding:
-      78px 0 50px;
+  .reader {
+    padding: 78px 0 48px;
   }
 
-  .reader-cover-section,
-  .reader-page {
+  .reader__item {
     width: 96vw;
+    margin-bottom: 14px;
   }
 
-  .reader-cover-section {
+  .reader__cover {
     min-height: auto;
-
     margin-bottom: 20px;
   }
 
-  .reader-cover-section img {
+  .reader__cover img {
     width: 100%;
     max-height: none;
   }
 
-  .reader-page {
-    margin-bottom: 14px;
-  }
-
-  .reader-page img {
+  .reader__item img {
     width: 100%;
   }
 }
