@@ -14,131 +14,125 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="archive-page">
+<body>
 
-  <main class="archive-scene" id="archiveScene">
+  <main class="archive" id="archive">
 
-    <!-- ISSUE 01 -->
-    <div class="stack-position position-01">
-      <article class="poster-stack stack-01">
+    <div class="scene" id="scene">
 
-        <div class="paper-layer layer-04"></div>
-        <div class="paper-layer layer-03"></div>
-        <div class="paper-layer layer-02"></div>
-        <div class="paper-layer layer-01"></div>
+      <div class="carousel" id="carousel">
 
-        <div class="stack-cover">
-          <img
-            src="images/cover01.jpg"
-            alt="Issue 01 cover"
-          >
-        </div>
+        <article
+          class="magazine-card"
+          data-index="0"
+          data-issue="1"
+          style="--card-angle: 0deg;"
+          tabindex="0"
+        >
+          <div class="card-image">
+            <img
+              src="images/cover01.jpg"
+              alt="Issue 01"
+              draggable="false"
+            >
+          </div>
+        </article>
 
-      </article>
+        <article
+          class="magazine-card"
+          data-index="1"
+          data-issue="2"
+          style="--card-angle: 60deg;"
+          tabindex="0"
+        >
+          <div class="card-image">
+            <img
+              src="images/cover02.jpg"
+              alt="Issue 02"
+              draggable="false"
+            >
+          </div>
+        </article>
+
+        <article
+          class="magazine-card"
+          data-index="2"
+          data-issue="3"
+          style="--card-angle: 120deg;"
+          tabindex="0"
+        >
+          <div class="card-image">
+            <img
+              src="images/cover03.jpg"
+              alt="Issue 03"
+              draggable="false"
+            >
+          </div>
+        </article>
+
+        <article
+          class="magazine-card"
+          data-index="3"
+          data-issue="4"
+          style="--card-angle: 180deg;"
+          tabindex="0"
+        >
+          <div class="card-image">
+            <img
+              src="images/cover04.jpg"
+              alt="Issue 04"
+              draggable="false"
+            >
+          </div>
+        </article>
+
+        <article
+          class="magazine-card"
+          data-index="4"
+          data-issue="5"
+          style="--card-angle: 240deg;"
+          tabindex="0"
+        >
+          <div class="card-image">
+            <img
+              src="images/cover05.jpg"
+              alt="Issue 05"
+              draggable="false"
+            >
+          </div>
+        </article>
+
+        <article
+          class="magazine-card"
+          data-index="5"
+          data-issue="6"
+          style="--card-angle: 300deg;"
+          tabindex="0"
+        >
+          <div class="card-image">
+            <img
+              src="images/cover06.jpg"
+              alt="Issue 06"
+              draggable="false"
+            >
+          </div>
+        </article>
+
+      </div>
+
     </div>
 
-    <!-- ISSUE 02 -->
-    <div class="stack-position position-02">
-      <article class="poster-stack stack-02">
-
-        <div class="paper-layer layer-04"></div>
-        <div class="paper-layer layer-03"></div>
-        <div class="paper-layer layer-02"></div>
-        <div class="paper-layer layer-01"></div>
-
-        <div class="stack-cover">
-          <img
-            src="images/cover02.jpg"
-            alt="Issue 02 cover"
-          >
-        </div>
-
-      </article>
-    </div>
-
-    <!-- ISSUE 03 -->
-    <div class="stack-position position-03">
-      <article class="poster-stack stack-03">
-
-        <div class="paper-layer layer-04"></div>
-        <div class="paper-layer layer-03"></div>
-        <div class="paper-layer layer-02"></div>
-        <div class="paper-layer layer-01"></div>
-
-        <div class="stack-cover">
-          <img
-            src="images/cover03.jpg"
-            alt="Issue 03 cover"
-          >
-        </div>
-
-      </article>
-    </div>
-
-    <!-- ISSUE 04 -->
-    <div class="stack-position position-04">
-      <article class="poster-stack stack-04">
-
-        <div class="paper-layer layer-04"></div>
-        <div class="paper-layer layer-03"></div>
-        <div class="paper-layer layer-02"></div>
-        <div class="paper-layer layer-01"></div>
-
-        <div class="stack-cover">
-          <img
-            src="images/cover04.jpg"
-            alt="Issue 04 cover"
-          >
-        </div>
-
-      </article>
-    </div>
-
-    <!-- ISSUE 05 -->
-    <div class="stack-position position-05">
-      <article class="poster-stack stack-05">
-
-        <div class="paper-layer layer-04"></div>
-        <div class="paper-layer layer-03"></div>
-        <div class="paper-layer layer-02"></div>
-        <div class="paper-layer layer-01"></div>
-
-        <div class="stack-cover">
-          <img
-            src="images/cover05.jpg"
-            alt="Issue 05 cover"
-          >
-        </div>
-
-      </article>
-    </div>
-
-    <!-- ISSUE 06 -->
-    <div
-      class="stack-position position-06"
-      id="issue06Position"
+    <button
+      class="close-selection"
+      id="closeSelection"
+      type="button"
+      aria-label="Return to archive"
     >
-      <article
-        class="poster-stack stack-06"
-        id="issue06Stack"
-        role="button"
-        tabindex="0"
-        aria-label="Open Issue 06"
-      >
+      ×
+    </button>
 
-        <div class="paper-layer layer-04"></div>
-        <div class="paper-layer layer-03"></div>
-        <div class="paper-layer layer-02"></div>
-        <div class="paper-layer layer-01"></div>
-
-        <div class="stack-cover">
-          <img
-            src="images/cover06.jpg"
-            alt="Issue 06 cover"
-          >
-        </div>
-
-      </article>
+    <div class="instruction" id="instruction">
+      DRAG TO ROTATE
     </div>
 
   </main>
