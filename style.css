@@ -1,11 +1,6 @@
-:root {
-  --card-width: clamp(220px, 27vw, 430px);
-  --carousel-radius: clamp(330px, 34vw, 580px);
-}
-
-/* =========================
+/* ========================================
    基础
-========================= */
+======================================== */
 
 * {
   margin: 0;
@@ -16,12 +11,10 @@
 html,
 body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
-  overflow: hidden;
-
   background: #000;
   color: #fff;
 
@@ -39,11 +32,20 @@ img {
   display: block;
 }
 
-/* =========================
-   黑色空间
-========================= */
+/* ========================================
+   3D 首页
+======================================== */
 
-.archive {
+.archive-page {
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+
+  background: #000;
+}
+
+#archive {
   position: relative;
 
   width: 100vw;
@@ -53,290 +55,200 @@ img {
 
   background:
     radial-gradient(
-      ellipse at 50% 48%,
-      rgba(35, 35, 35, 0.62) 0%,
-      rgba(10, 10, 10, 0.88) 45%,
-      #000 82%
+      circle at 50% 48%,
+      #181818 0%,
+      #080808 42%,
+      #000 78%
     );
 
-  user-select: none;
   cursor: grab;
+
+  user-select: none;
+  touch-action: none;
 }
 
-.archive.is-dragging {
+#archive.is-dragging {
   cursor: grabbing;
 }
 
-/* 空间轻微光晕 */
-
-.archive::before {
-  content: "";
-
-  position: absolute;
-  inset: -20%;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(255, 255, 255, 0.035),
-      transparent 52%
-    );
-
-  filter: blur(30px);
-}
-
-/* =========================
-   3D 场景
-========================= */
-
-.scene {
+#webgl {
   position: absolute;
   inset: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 100%;
 
-  perspective: 1800px;
-  perspective-origin: 50% 50%;
-
-  transform-style: preserve-3d;
-
-  transition:
-    perspective 0.35s ease;
-}
-
-.carousel {
-  position: relative;
-
-  width: var(--card-width);
-  height: calc(var(--card-width) * 0.63);
-
-  transform-style: preserve-3d;
-
-  transform:
-    rotateX(-8deg)
-    rotateY(0deg);
-
-  will-change: transform;
-}
-
-/* =========================
-   封面
-========================= */
-
-.magazine-card {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: var(--card-width);
-
-  transform-style: preserve-3d;
-  transform-origin: center center;
-
-  opacity: 0;
-
-  transform:
-    translate(-50%, -50%)
-    rotateY(var(--card-angle))
-    translateZ(0)
-    scale(0.08);
-
-  animation:
-    cardExpand 1.35s
-    cubic-bezier(0.18, 0.82, 0.2, 1)
-    forwards;
-
-  transition:
-    opacity 0.65s ease,
-    filter 0.55s ease;
-
-  cursor: pointer;
+  display: block;
 
   outline: none;
-  will-change: transform, opacity;
 }
 
-.magazine-card:nth-child(1) {
-  animation-delay: 0.04s;
-}
+/* ========================================
+   加载界面
+======================================== */
 
-.magazine-card:nth-child(2) {
-  animation-delay: 0.12s;
-}
-
-.magazine-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.magazine-card:nth-child(4) {
-  animation-delay: 0.28s;
-}
-
-.magazine-card:nth-child(5) {
-  animation-delay: 0.36s;
-}
-
-.magazine-card:nth-child(6) {
-  animation-delay: 0.44s;
-}
-
-/* 从中心向外展开 */
-
-@keyframes cardExpand {
-  0% {
-    opacity: 0;
-
-    transform:
-      translate(-50%, -50%)
-      rotateY(var(--card-angle))
-      translateZ(0)
-      scale(0.08);
-  }
-
-  55% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 1;
-
-    transform:
-      translate(-50%, -50%)
-      rotateY(var(--card-angle))
-      translateZ(var(--carousel-radius))
-      scale(1);
-  }
-}
-
-/* 图片按原始比例完整显示 */
-
-.card-image {
-  position: relative;
-
-  width: 100%;
-
-  overflow: hidden;
-
-  background: #0b0b0b;
-
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-
-  box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.8),
-    0 0 1px rgba(255, 255, 255, 0.32);
-
-  transition:
-    filter 0.28s ease,
-    box-shadow 0.28s ease,
-    transform 0.28s ease;
-}
-
-.card-image img {
-  width: 100%;
-  height: auto;
-
-  pointer-events: none;
-
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-/* 鼠标经过 */
-
-.magazine-card:hover .card-image {
-  filter: brightness(1.12);
-
-  box-shadow:
-    0 45px 115px rgba(0, 0, 0, 0.9),
-    0 0 28px rgba(255, 255, 255, 0.1);
-}
-
-.magazine-card:focus-visible .card-image {
-  outline: 2px solid #fff;
-  outline-offset: 8px;
-}
-
-/* =========================
-   抽出封面
-========================= */
-
-/*
-  选中后，JS 会把封面暂时移入 fixed overlay 状态。
-*/
-
-.magazine-card.is-selected {
+.loading-screen {
   position: fixed;
-
-  left: 50%;
-  top: 50%;
+  inset: 0;
 
   z-index: 500;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  background: #000;
+
   opacity: 1;
-
-  animation: none;
-
-  transform:
-    translate(-50%, -50%)
-    translateZ(0)
-    rotateX(0deg)
-    rotateY(0deg)
-    rotateZ(0deg)
-    scale(1.35) !important;
+  visibility: visible;
 
   transition:
-    transform 0.85s
-      cubic-bezier(0.2, 0.78, 0.2, 1),
-    opacity 0.5s ease,
-    filter 0.5s ease;
+    opacity 0.65s ease,
+    visibility 0.65s ease;
 }
 
-.archive.has-selection
-.magazine-card:not(.is-selected) {
-  opacity: 0.12;
-  filter: blur(8px) brightness(0.35);
+.loading-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-text {
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+.loading-line {
+  width: min(260px, 64vw);
+  height: 1px;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.loading-progress {
+  width: 0%;
+  height: 100%;
+
+  background: #fff;
+
+  transition: width 0.25s ease;
+}
+
+/* ========================================
+   首页界面
+======================================== */
+
+.archive-interface {
+  position: absolute;
+  inset: 0;
+
+  z-index: 20;
 
   pointer-events: none;
 }
 
-.archive.has-selection .carousel {
-  transition:
-    transform 0.8s
-      cubic-bezier(0.2, 0.78, 0.2, 1);
+.archive-title {
+  position: absolute;
+
+  left: 28px;
+  top: 26px;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 11px;
+  letter-spacing: 0.18em;
 }
 
-/* 再次点击第六期时的展开 */
+.archive-hint {
+  position: absolute;
 
-.magazine-card.is-entering {
+  left: 50%;
+  bottom: 24px;
+
+  transform: translateX(-50%);
+
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 9px;
+  letter-spacing: 0.19em;
+
+  white-space: nowrap;
+
+  transition: opacity 0.3s ease;
+}
+
+#archive.has-selection .archive-hint {
+  opacity: 0;
+}
+
+/* ========================================
+   选中信息
+======================================== */
+
+.selected-information {
+  position: absolute;
+
+  left: 50%;
+  bottom: 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 7px;
+
   transform:
-    translate(-50%, -50%)
-    scale(3.8) !important;
+    translateX(-50%)
+    translateY(12px);
 
   opacity: 0;
+  visibility: hidden;
 
   transition:
-    transform 0.8s
-      cubic-bezier(0.22, 0.8, 0.2, 1),
-    opacity 0.72s ease;
+    opacity 0.35s ease,
+    visibility 0.35s ease,
+    transform 0.35s ease;
 }
 
-/* =========================
-   关闭按钮
-========================= */
+#archive.has-selection .selected-information {
+  opacity: 1;
+  visibility: visible;
 
-.close-selection {
-  position: fixed;
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+#selectedIssue {
+  font-size: 11px;
+  letter-spacing: 0.17em;
+}
+
+.selected-action {
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+
+/* ========================================
+   关闭按钮
+======================================== */
+
+.close-button {
+  position: absolute;
 
   right: 28px;
-  top: 28px;
+  top: 24px;
 
-  z-index: 800;
+  z-index: 40;
 
   width: 48px;
   height: 48px;
@@ -346,119 +258,256 @@ img {
   justify-content: center;
 
   border:
-    1px solid rgba(255, 255, 255, 0.42);
+    1px solid rgba(255, 255, 255, 0.38);
 
   border-radius: 50%;
 
-  background:
-    rgba(0, 0, 0, 0.46);
-
+  background: rgba(0, 0, 0, 0.4);
   color: #fff;
 
-  font-size: 27px;
+  font-size: 28px;
+  font-weight: 300;
   line-height: 1;
-
-  cursor: pointer;
 
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.8);
+  transform: scale(0.85);
+
+  cursor: pointer;
+  pointer-events: auto;
 
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
   transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease,
-    transform 0.3s ease,
-    background 0.25s ease,
-    color 0.25s ease;
+    opacity 0.28s ease,
+    visibility 0.28s ease,
+    transform 0.28s ease,
+    background 0.22s ease,
+    color 0.22s ease;
 }
 
-.archive.has-selection
-.close-selection {
+#archive.has-selection .close-button {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
 }
 
-.close-selection:hover {
+.close-button:hover {
   color: #000;
   background: #fff;
 }
 
-/* =========================
-   提示文字
-========================= */
+/* ========================================
+   内页长图页面
+======================================== */
 
-.instruction {
+.issue-page {
+  min-height: 100vh;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background: #000;
+}
+
+.issue-header {
   position: fixed;
 
-  left: 50%;
-  bottom: 24px;
+  left: 0;
+  top: 0;
 
   z-index: 100;
 
-  transform: translateX(-50%);
+  width: 100%;
+  height: 72px;
 
-  color:
-    rgba(255, 255, 255, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.92),
+      rgba(0, 0, 0, 0)
+    );
+
+  pointer-events: none;
+}
+
+.back-link {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.4);
+
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.42);
+  color: #fff;
+
+  font-size: 22px;
+
+  text-decoration: none;
+
+  pointer-events: auto;
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+
+  transition:
+    color 0.22s ease,
+    background 0.22s ease,
+    transform 0.22s ease;
+}
+
+.back-link:hover {
+  color: #000;
+  background: #fff;
+
+  transform: scale(1.06);
+}
+
+.issue-label {
+  color: rgba(255, 255, 255, 0.7);
 
   font-size: 10px;
   letter-spacing: 0.18em;
-
-  pointer-events: none;
-
-  transition:
-    opacity 0.35s ease;
 }
 
-.archive.has-selection .instruction {
-  opacity: 0;
+.longform-reader {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding:
+    96px 0 80px;
 }
 
-/* =========================
-   手机
-========================= */
+.reader-cover-section,
+.reader-page {
+  width: min(94vw, 1600px);
+
+  display: flex;
+  justify-content: center;
+}
+
+.reader-cover-section {
+  min-height: calc(100vh - 130px);
+
+  align-items: center;
+
+  margin-bottom: 48px;
+}
+
+.reader-cover-section img {
+  max-width: 100%;
+  max-height: calc(100vh - 145px);
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.72);
+}
+
+.reader-page {
+  margin-bottom: 28px;
+}
+
+.reader-page img {
+  max-width: 100%;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  background: #111;
+
+  box-shadow:
+    0 26px 85px rgba(0, 0, 0, 0.6);
+}
+
+.issue-footer {
+  padding: 80px 20px 25px;
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+  letter-spacing: 0.19em;
+}
+
+/* ========================================
+   手机适配
+======================================== */
 
 @media (max-width: 800px) {
-  :root {
-    --card-width:
-      clamp(150px, 46vw, 250px);
-
-    --carousel-radius:
-      clamp(210px, 60vw, 330px);
+  .archive-title {
+    left: 14px;
+    top: 16px;
   }
 
-  .carousel {
-    transform:
-      rotateX(-6deg)
-      rotateY(0deg);
+  .archive-hint {
+    bottom: 17px;
   }
 
-  .magazine-card.is-selected {
-    transform:
-      translate(-50%, -50%)
-      scale(1.65) !important;
-  }
-
-  .close-selection {
+  .close-button {
     right: 12px;
     top: 12px;
 
     width: 44px;
     height: 44px;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .magazine-card {
-    animation: none;
-    opacity: 1;
+  .issue-header {
+    height: 62px;
+    padding: 0 12px;
+  }
 
-    transform:
-      translate(-50%, -50%)
-      rotateY(var(--card-angle))
-      translateZ(var(--carousel-radius));
+  .back-link {
+    width: 42px;
+    height: 42px;
+  }
+
+  .longform-reader {
+    padding:
+      78px 0 50px;
+  }
+
+  .reader-cover-section,
+  .reader-page {
+    width: 96vw;
+  }
+
+  .reader-cover-section {
+    min-height: auto;
+
+    margin-bottom: 20px;
+  }
+
+  .reader-cover-section img {
+    width: 100%;
+    max-height: none;
+  }
+
+  .reader-page {
+    margin-bottom: 14px;
+  }
+
+  .reader-page img {
+    width: 100%;
   }
 }
