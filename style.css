@@ -1,12 +1,12 @@
 :root {
-  --book-width: clamp(125px, 14vw, 220px);
-  --book-ratio: 1.414;
-  --book-height: calc(
-    var(--book-width) * var(--book-ratio)
-  );
-
-  /* 杂志厚度 */
-  --book-depth: 8px;
+  /*
+    横版封面尺寸。
+    如果你的封面比例接近 16:9，这个比例比较合适。
+  */
+  --stack-width: clamp(210px, 22vw, 370px);
+  --stack-ratio: 0.625;
+  --stack-height:
+    calc(var(--stack-width) * var(--stack-ratio));
 }
 
 /* ==============================
@@ -19,36 +19,49 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  width: 100%;
+  min-height: 100%;
+  background: #000;
+}
+
 body {
   width: 100%;
-  height: 100%;
-}
-
-body {
+  min-height: 100%;
   background: #000;
   color: #fff;
-  overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
-button {
-  font-family: inherit;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
 }
 
 /* ==============================
-   首页：黑色空间
+   首页
 ============================== */
 
 .archive-page {
-  background: #000;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.archive-space {
+.archive-scene {
   position: relative;
 
   width: 100vw;
   height: 100vh;
+
+  overflow: hidden;
 
   perspective: 1800px;
   perspective-origin: 50% 50%;
@@ -58,29 +71,29 @@ button {
   background:
     radial-gradient(
       ellipse at 50% 48%,
-      rgba(36, 36, 36, 0.48) 0%,
-      rgba(10, 10, 10, 0.82) 45%,
+      rgba(35, 35, 35, 0.48) 0%,
+      rgba(10, 10, 10, 0.86) 48%,
       #000 82%
     );
 
   transition:
-    transform 0.15s ease-out;
+    transform 0.16s ease-out;
 }
 
-/* ==============================
-   杂志容器
-============================== */
+/* 每叠海报的位置容器 */
 
-.book-position {
+.stack-position {
   position: absolute;
 
-  width: var(--book-width);
-  height: var(--book-height);
+  width: var(--stack-width);
+  height: var(--stack-height);
 
   transform-style: preserve-3d;
 }
 
-.book {
+/* 海报堆本体 */
+
+.poster-stack {
   position: relative;
 
   width: 100%;
@@ -92,45 +105,40 @@ button {
   transform-origin: center center;
 
   animation:
-    bookEntrance 1.4s forwards;
+    stackEntrance 1.35s forwards;
 
   transition:
-    transform 0.7s
-      cubic-bezier(0.2, 0.74, 0.2, 1),
-    filter 0.45s ease,
-    opacity 0.5s ease;
+    transform 0.65s
+      cubic-bezier(0.2, 0.72, 0.2, 1),
+    filter 0.4s ease,
+    opacity 0.45s ease;
 }
 
-/*
-没有整张背面。
-只有封面和窄边缘，所以不会出现一半明一半暗。
-*/
+/* 封面 */
 
-.book-cover {
+.stack-cover {
   position: absolute;
   inset: 0;
 
-  z-index: 5;
+  z-index: 10;
 
   overflow: hidden;
 
   background: #111;
 
   transform:
-    translateZ(calc(var(--book-depth) / 2));
+    translateZ(6px);
 
   backface-visibility: hidden;
 
   box-shadow:
-    0 30px 70px rgba(0, 0, 0, 0.72),
-    0 0 1px rgba(255, 255, 255, 0.4);
+    0 30px 75px rgba(0, 0, 0, 0.72),
+    0 0 1px rgba(255, 255, 255, 0.35);
 }
 
-.book-cover img {
+.stack-cover img {
   width: 100%;
   height: 100%;
-
-  display: block;
 
   object-fit: cover;
 
@@ -138,122 +146,75 @@ button {
   -webkit-user-drag: none;
 }
 
-/* 左侧书脊 */
+/*
+  纸张层不会覆盖封面。
+  每层只是向右下方露出少量边缘。
+*/
 
-.book-spine {
+.paper-layer {
   position: absolute;
-
-  left: calc(var(--book-depth) / -2);
-  top: 0;
-
-  width: var(--book-depth);
-  height: 100%;
-
-  z-index: 3;
-
-  transform:
-    rotateY(-90deg);
+  inset: 0;
 
   background:
     linear-gradient(
-      90deg,
-      #111 0%,
-      #4a4a4a 45%,
-      #171717 100%
+      135deg,
+      #fafafa 0%,
+      #d9d9d9 100%
     );
+
+  border:
+    1px solid rgba(0, 0, 0, 0.18);
+
+  pointer-events: none;
 }
 
-/* 右侧纸页厚度 */
+/* 越下面的纸张，偏移越大 */
 
-.book-pages-right {
-  position: absolute;
-
-  right: calc(var(--book-depth) / -2);
-  top: 1px;
-
-  width: var(--book-depth);
-  height: calc(100% - 2px);
-
-  z-index: 3;
+.layer-01 {
+  z-index: 9;
 
   transform:
-    rotateY(90deg);
-
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      #eeeeee 0,
-      #eeeeee 1px,
-      #b9b9b9 2px,
-      #f3f3f3 3px
-    );
+    translate3d(2px, 2px, 4px);
 }
 
-/* 上方纸页厚度 */
-
-.book-pages-top {
-  position: absolute;
-
-  left: 1px;
-  top: calc(var(--book-depth) / -2);
-
-  width: calc(100% - 2px);
-  height: var(--book-depth);
-
-  z-index: 3;
+.layer-02 {
+  z-index: 8;
 
   transform:
-    rotateX(90deg);
-
-  background:
-    repeating-linear-gradient(
-      to right,
-      #f2f2f2 0,
-      #f2f2f2 2px,
-      #b7b7b7 3px,
-      #e4e4e4 4px
-    );
+    translate3d(5px, 5px, 2px);
 }
 
-/* 下方纸页厚度 */
-
-.book-pages-bottom {
-  position: absolute;
-
-  left: 1px;
-  bottom: calc(var(--book-depth) / -2);
-
-  width: calc(100% - 2px);
-  height: var(--book-depth);
-
-  z-index: 3;
+.layer-03 {
+  z-index: 7;
 
   transform:
-    rotateX(-90deg);
-
-  background:
-    repeating-linear-gradient(
-      to right,
-      #bdbdbd 0,
-      #e7e7e7 2px,
-      #9e9e9e 3px,
-      #d7d7d7 4px
-    );
+    translate3d(8px, 8px, 0);
 }
 
-/* ==============================
-   首页出现动画
-============================== */
+.layer-04 {
+  z-index: 6;
 
-@keyframes bookEntrance {
+  transform:
+    translate3d(11px, 11px, -2px);
+
+  box-shadow:
+    10px 12px 35px
+    rgba(0, 0, 0, 0.5);
+}
+
+/* 出现动画 */
+
+@keyframes stackEntrance {
   0% {
     opacity: 0;
+
     filter: blur(7px);
 
     transform:
-      translateZ(-750px)
-      scale(0.2)
-      rotateY(65deg);
+      translateZ(-650px)
+      scale(0.3)
+      rotateX(12deg)
+      rotateY(28deg);
   }
 
   70% {
@@ -267,138 +228,140 @@ button {
 }
 
 /* ==============================
-   六本杂志位置
+   六期布局
 ============================== */
 
 .position-01 {
-  left: 7%;
-  top: 27%;
+  left: 5%;
+  top: 21%;
+
+  z-index: 3;
 
   transform:
-    translateZ(-120px);
-
-  z-index: 2;
+    translateZ(-100px);
 }
 
-.book-01 {
+.stack-01 {
   transform:
     rotateX(-2deg)
-    rotateY(13deg)
-    rotateZ(-8deg);
+    rotateY(8deg)
+    rotateZ(-7deg);
 
   animation-delay: 0.05s;
 }
 
 .position-02 {
-  left: 32%;
+  left: 34%;
   top: 7%;
 
-  transform:
-    translateZ(-230px);
+  z-index: 2;
 
-  z-index: 1;
+  transform:
+    translateZ(-190px);
 }
 
-.book-02 {
+.stack-02 {
   transform:
-    rotateX(3deg)
-    rotateY(-11deg)
-    rotateZ(6deg);
+    rotateX(2deg)
+    rotateY(-7deg)
+    rotateZ(5deg);
 
   animation-delay: 0.17s;
 }
 
 .position-03 {
-  right: 8%;
-  top: 19%;
+  right: 5%;
+  top: 18%;
+
+  z-index: 4;
 
   transform:
-    translateZ(-70px);
-
-  z-index: 3;
+    translateZ(-60px);
 }
 
-.book-03 {
+.stack-03 {
   transform:
-    rotateX(-3deg)
-    rotateY(-13deg)
-    rotateZ(8deg);
+    rotateX(-2deg)
+    rotateY(-8deg)
+    rotateZ(6deg);
 
   animation-delay: 0.29s;
 }
 
 .position-04 {
-  right: 10%;
+  right: 7%;
   bottom: 9%;
 
-  transform:
-    translateZ(-150px);
-
   z-index: 2;
+
+  transform:
+    translateZ(-140px);
 }
 
-.book-04 {
+.stack-04 {
   transform:
-    rotateX(3deg)
-    rotateY(12deg)
-    rotateZ(-8deg);
+    rotateX(2deg)
+    rotateY(7deg)
+    rotateZ(-6deg);
 
   animation-delay: 0.41s;
 }
 
 .position-05 {
-  left: 25%;
-  bottom: 7%;
+  left: 22%;
+  bottom: 8%;
+
+  z-index: 5;
 
   transform:
-    translateZ(-30px);
-
-  z-index: 4;
+    translateZ(-20px);
 }
 
-.book-05 {
+.stack-05 {
   transform:
-    rotateX(-3deg)
-    rotateY(10deg)
-    rotateZ(6deg);
+    rotateX(-2deg)
+    rotateY(6deg)
+    rotateZ(5deg);
 
   animation-delay: 0.53s;
 }
 
 .position-06 {
-  left: 45%;
-  top: 35%;
-
-  transform:
-    translateZ(70px);
+  left: 43%;
+  top: 37%;
 
   z-index: 10;
+
+  transform:
+    translateZ(80px);
 }
 
-.book-06 {
+.stack-06 {
   cursor: pointer;
 
   transform:
-    rotateX(-2deg)
-    rotateY(-8deg)
-    rotateZ(-2deg);
+    rotateX(-1deg)
+    rotateY(-5deg)
+    rotateZ(-1deg);
 
   animation-delay: 0.65s;
 }
 
-.book-06:hover {
+.stack-06:hover {
   filter: brightness(1.08);
 
   transform:
-    translateZ(90px)
-    scale(1.07)
+    translateZ(80px)
+    scale(1.06)
     rotateX(0deg)
     rotateY(0deg)
     rotateZ(0deg);
 }
 
-.book-06:focus-visible {
-  outline: 2px solid #fff;
+.stack-06:focus-visible {
+  outline:
+    2px solid #fff;
+
   outline-offset: 8px;
 }
 
@@ -406,28 +369,28 @@ button {
    点击第六期
 ============================== */
 
-.archive-space.is-opening {
+.archive-scene.is-opening {
   transform: none !important;
 }
 
-.archive-space.is-opening
-.book-position:not(.position-06) {
+.archive-scene.is-opening
+.stack-position:not(.position-06) {
   pointer-events: none;
 }
 
-.archive-space.is-opening
-.book-position:not(.position-06)
-.book {
+.archive-scene.is-opening
+.stack-position:not(.position-06)
+.poster-stack {
   opacity: 0;
 
   filter: blur(10px);
 
   transform:
-    translateZ(-400px)
-    scale(0.75);
+    translateZ(-350px)
+    scale(0.78);
 }
 
-.position-06.is-opening-book {
+.position-06.is-opening-stack {
   position: fixed;
 
   left: 50%;
@@ -437,271 +400,79 @@ button {
 
   transform:
     translate(-50%, -50%)
-    translateZ(500px);
+    translateZ(520px);
 }
 
-.position-06.is-opening-book
-.book-06 {
+.position-06.is-opening-stack
+.stack-06 {
   animation: none;
   opacity: 1;
 
   transform:
-    scale(2.2)
+    scale(2.15)
     rotateX(0deg)
     rotateY(0deg)
     rotateZ(0deg);
 
   transition:
-    transform 1s
-      cubic-bezier(0.22, 0.8, 0.2, 1);
+    transform 0.85s
+      cubic-bezier(0.22, 0.78, 0.2, 1);
 }
 
 /* ==============================
-   内页阅读器
+   第六期长图阅读
 ============================== */
 
 .issue-page {
-  width: 100vw;
-  height: 100vh;
-
-  background: #000;
-}
-
-.magazine-reader {
-  position: relative;
-
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  perspective: 1800px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   background:
-    radial-gradient(
-      ellipse at center,
-      rgba(32, 32, 32, 0.72) 0%,
-      rgba(5, 5, 5, 0.96) 68%,
+    linear-gradient(
+      to bottom,
+      #050505 0%,
       #000 100%
     );
 }
 
-.page-frame {
-  position: relative;
+/* 固定顶部导航 */
+
+.issue-header {
+  position: fixed;
+
+  left: 0;
+  top: 0;
+
+  z-index: 100;
 
   width: 100%;
-  height: 100%;
+  height: 72px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+
+  padding:
+    0 28px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0)
+    );
 
   pointer-events: none;
 }
 
-.page-book {
-  position: relative;
+.back-link {
+  width: 46px;
+  height: 46px;
 
-  max-width: 90vw;
-  max-height: 90vh;
-
-  transform-style: preserve-3d;
-}
-
-/* 页面下方的纸张堆叠厚度 */
-
-.reader-page-stack {
-  position: absolute;
-
-  left: 7px;
-  right: -7px;
-  top: 7px;
-  bottom: -7px;
-
-  z-index: 0;
-
-  border-right: 6px solid #d6d6d6;
-  border-bottom: 6px solid #b7b7b7;
-
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      #f0f0f0 0,
-      #f0f0f0 1px,
-      #bebebe 2px,
-      #ededed 3px
-    );
-
-  box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.72);
-}
-
-.turning-page {
-  position: relative;
-
-  z-index: 2;
-
-  transform-style: preserve-3d;
-  transform-origin: left center;
-
-  backface-visibility: hidden;
-
-  will-change: transform, opacity, filter;
-}
-
-.turning-page img {
-  max-width: 90vw;
-  max-height: 90vh;
-
-  width: auto;
-  height: auto;
-
-  display: block;
-  object-fit: contain;
-
-  background: #fff;
-
-  box-shadow:
-    0 28px 75px rgba(0, 0, 0, 0.58);
-
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-/* 向后翻页 */
-
-.turning-page.turn-out-next {
-  animation:
-    turnOutNext 0.38s ease-in forwards;
-}
-
-.turning-page.turn-in-next {
-  animation:
-    turnInNext 0.46s
-      cubic-bezier(0.22, 0.75, 0.2, 1)
-      forwards;
-}
-
-@keyframes turnOutNext {
-  0% {
-    opacity: 1;
-
-    transform:
-      rotateY(0deg)
-      translateX(0);
-
-    filter: brightness(1);
-  }
-
-  100% {
-    opacity: 0;
-
-    transform:
-      rotateY(-82deg)
-      translateX(-18px);
-
-    filter: brightness(0.52);
-  }
-}
-
-@keyframes turnInNext {
-  0% {
-    opacity: 0;
-
-    transform:
-      rotateY(75deg)
-      translateX(22px);
-
-    filter: brightness(0.6);
-  }
-
-  100% {
-    opacity: 1;
-
-    transform:
-      rotateY(0deg)
-      translateX(0);
-
-    filter: brightness(1);
-  }
-}
-
-/* 向前翻页 */
-
-.turning-page.turn-out-previous {
-  transform-origin: right center;
-
-  animation:
-    turnOutPrevious 0.38s ease-in forwards;
-}
-
-.turning-page.turn-in-previous {
-  transform-origin: right center;
-
-  animation:
-    turnInPrevious 0.46s
-      cubic-bezier(0.22, 0.75, 0.2, 1)
-      forwards;
-}
-
-@keyframes turnOutPrevious {
-  0% {
-    opacity: 1;
-
-    transform:
-      rotateY(0deg)
-      translateX(0);
-
-    filter: brightness(1);
-  }
-
-  100% {
-    opacity: 0;
-
-    transform:
-      rotateY(82deg)
-      translateX(18px);
-
-    filter: brightness(0.52);
-  }
-}
-
-@keyframes turnInPrevious {
-  0% {
-    opacity: 0;
-
-    transform:
-      rotateY(-75deg)
-      translateX(-22px);
-
-    filter: brightness(0.6);
-  }
-
-  100% {
-    opacity: 1;
-
-    transform:
-      rotateY(0deg)
-      translateX(0);
-
-    filter: brightness(1);
-  }
-}
-
-/* ==============================
-   阅读器按钮
-============================== */
-
-.reader-nav-button,
-.reader-home-button {
-  position: fixed;
-
-  z-index: 80;
-
-  width: 50px;
-  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border:
     1px solid rgba(255, 255, 255, 0.42);
@@ -709,121 +480,110 @@ button {
   border-radius: 50%;
 
   background:
-    rgba(0, 0, 0, 0.48);
-
-  color: #fff;
+    rgba(0, 0, 0, 0.42);
 
   font-size: 22px;
-  line-height: 1;
 
-  cursor: pointer;
+  pointer-events: auto;
 
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
 
   transition:
-    color 0.22s ease,
     background 0.22s ease,
+    color 0.22s ease,
     transform 0.22s ease;
 }
 
-.reader-nav-button:hover,
-.reader-home-button:hover {
+.back-link:hover {
   color: #000;
   background: #fff;
-}
-
-.reader-home-button {
-  left: 28px;
-  top: 28px;
-}
-
-.reader-home-button:hover {
-  transform: scale(1.07);
-}
-
-.reader-previous {
-  left: 28px;
-  top: 50%;
 
   transform:
-    translateY(-50%);
+    scale(1.06);
 }
 
-.reader-previous:hover {
-  transform:
-    translateY(-50%)
-    scale(1.07);
-}
-
-.reader-next {
-  right: 28px;
-  top: 50%;
-
-  transform:
-    translateY(-50%);
-}
-
-.reader-next:hover {
-  transform:
-    translateY(-50%)
-    scale(1.07);
-}
-
-.reader-page-number {
-  position: fixed;
-
-  left: 50%;
-  bottom: 22px;
-
-  z-index: 80;
-
-  transform:
-    translateX(-50%);
-
-  padding: 8px 13px;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.18);
-
-  border-radius: 20px;
-
-  background:
-    rgba(0, 0, 0, 0.5);
-
-  color: #fff;
-
+.issue-label {
   font-size: 12px;
-  letter-spacing: 0.14em;
-
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  letter-spacing: 0.16em;
+  color:
+    rgba(255, 255, 255, 0.72);
 }
 
-/* 大面积点击区域 */
+/* 长页面容器 */
 
-.page-click-area {
-  position: fixed;
+.longform-reader {
+  width: 100%;
 
-  top: 0;
-  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  z-index: 25;
-
-  width: 32vw;
-
-  border: 0;
-  background: transparent;
-
-  cursor: pointer;
+  padding:
+    110px 0 80px;
 }
 
-.page-click-left {
-  left: 0;
+/* 首屏封面 */
+
+.reader-cover-section {
+  width: min(92vw, 1500px);
+
+  margin-bottom: 80px;
+
+  display: flex;
+  justify-content: center;
+
+  min-height: calc(100vh - 150px);
 }
 
-.page-click-right {
-  right: 0;
+.reader-cover-section img {
+  width: 100%;
+  height: auto;
+
+  object-fit: contain;
+
+  align-self: center;
+
+  box-shadow:
+    0 35px 100px rgba(0, 0, 0, 0.65);
+}
+
+/* 后续每一页 */
+
+.reader-page {
+  width: min(92vw, 1500px);
+
+  margin-bottom: 48px;
+
+  display: flex;
+  justify-content: center;
+
+  scroll-margin-top: 40px;
+}
+
+.reader-page img {
+  width: 100%;
+  height: auto;
+
+  object-fit: contain;
+
+  background: #111;
+
+  box-shadow:
+    0 30px 85px rgba(0, 0, 0, 0.58);
+}
+
+/* 结尾 */
+
+.issue-footer {
+  padding:
+    70px 20px 20px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+
+  font-size: 11px;
+  letter-spacing: 0.18em;
 }
 
 /* ==============================
@@ -832,84 +592,87 @@ button {
 
 @media (max-width: 800px) {
   :root {
-    --book-width:
-      clamp(92px, 24vw, 150px);
-
-    --book-depth: 6px;
+    --stack-width:
+      clamp(135px, 38vw, 220px);
   }
 
   .position-01 {
-    left: 3%;
-    top: 24%;
+    left: 1%;
+    top: 21%;
   }
 
   .position-02 {
-    left: 36%;
+    left: 32%;
     top: 8%;
   }
 
   .position-03 {
-    right: 3%;
+    right: 1%;
     top: 25%;
   }
 
   .position-04 {
-    right: 3%;
-    bottom: 11%;
+    right: 1%;
+    bottom: 13%;
   }
 
   .position-05 {
-    left: 23%;
-    bottom: 7%;
+    left: 15%;
+    bottom: 9%;
   }
 
   .position-06 {
-    left: 41%;
-    top: 40%;
+    left: 39%;
+    top: 42%;
   }
 
-  .position-06.is-opening-book
-  .book-06 {
+  .position-06.is-opening-stack
+  .stack-06 {
     transform:
       scale(2.45)
       rotateX(0deg)
       rotateY(0deg);
   }
 
-  .turning-page img {
-    max-width: 95vw;
-    max-height: 86vh;
+  .issue-header {
+    height: 62px;
+    padding:
+      0 12px;
   }
 
-  .reader-nav-button,
-  .reader-home-button {
-    width: 44px;
-    height: 44px;
+  .back-link {
+    width: 42px;
+    height: 42px;
   }
 
-  .reader-home-button {
-    left: 12px;
-    top: 12px;
+  .longform-reader {
+    padding:
+      88px 0 50px;
   }
 
-  .reader-previous {
-    left: 12px;
+  .reader-cover-section,
+  .reader-page {
+    width: 96vw;
   }
 
-  .reader-next {
-    right: 12px;
+  .reader-cover-section {
+    min-height: auto;
+    margin-bottom: 32px;
+  }
+
+  .reader-page {
+    margin-bottom: 20px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .book,
-  .archive-space,
-  .turning-page {
+  .poster-stack,
+  .archive-scene {
     animation: none !important;
     transition: none !important;
   }
 
-  .book {
+  .poster-stack {
     opacity: 1;
   }
 }
