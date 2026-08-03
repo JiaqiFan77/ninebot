@@ -1,66 +1,89 @@
 const totalPages = 5;
 
 let currentPage = 1;
-let isAnimating = false;
+let isTurning = false;
 
-const magazinePage = document.getElementById("magazinePage");
-const pageCounter = document.getElementById("pageCounter");
-const pageStage = document.getElementById("pageStage");
+const turningPage =
+  document.getElementById("turningPage");
 
-function getPageFile(pageNumber) {
-  const formattedNumber = String(pageNumber).padStart(2, "0");
+const magazineImage =
+  document.getElementById("magazineImage");
 
-  return `images/issue06-page${formattedNumber}.jpg`;
+const pageNumber =
+  document.getElementById("pageNumber");
+
+function formatPageNumber(number) {
+  return String(number).padStart(2, "0");
 }
 
-function updatePage(direction) {
-  if (isAnimating) {
+function getPageSource(number) {
+  return `images/issue06-page${formatPageNumber(number)}.jpg`;
+}
+
+function setPage(number) {
+  const formattedPage = formatPageNumber(number);
+
+  magazineImage.src = getPageSource(number);
+  magazineImage.alt = `Issue 06 page ${number}`;
+
+  pageNumber.textContent =
+    `${formattedPage} / ${formatPageNumber(totalPages)}`;
+}
+
+function turnToPage(targetPage, direction) {
+  if (
+    isTurning ||
+    targetPage < 1 ||
+    targetPage > totalPages
+  ) {
     return;
   }
 
-  isAnimating = true;
+  isTurning = true;
 
-  pageStage.classList.remove("slide-left", "slide-right");
-  pageStage.classList.add(
-    direction === "next" ? "page-exit-left" : "page-exit-right"
+  turningPage.classList.remove(
+    "turn-out-next",
+    "turn-out-previous",
+    "turn-in-next",
+    "turn-in-previous"
   );
 
+  const outgoingClass =
+    direction === "next"
+      ? "turn-out-next"
+      : "turn-out-previous";
+
+  turningPage.classList.add(outgoingClass);
+
   window.setTimeout(() => {
-    const formattedNumber = String(currentPage).padStart(2, "0");
+    currentPage = targetPage;
+    setPage(currentPage);
 
-    magazinePage.src = getPageFile(currentPage);
-    magazinePage.alt = `Issue 06 page ${currentPage}`;
-    pageCounter.textContent = `${formattedNumber} / 05`;
+    turningPage.classList.remove(outgoingClass);
 
-    pageStage.classList.remove("page-exit-left", "page-exit-right");
-    pageStage.classList.add(
-      direction === "next" ? "slide-right" : "slide-left"
-    );
+    const incomingClass =
+      direction === "next"
+        ? "turn-in-next"
+        : "turn-in-previous";
+
+    turningPage.classList.add(incomingClass);
 
     window.setTimeout(() => {
-      pageStage.classList.remove("slide-left", "slide-right");
-      isAnimating = false;
-    }, 420);
-  }, 240);
+      turningPage.classList.remove(incomingClass);
+      isTurning = false;
+    }, 460);
+  }, 360);
 }
 
 function nextPage() {
-  if (currentPage >= totalPages || isAnimating) {
-    return;
-  }
-
-  currentPage += 1;
-  updatePage("next");
+  turnToPage(currentPage + 1, "next");
 }
 
 function previousPage() {
-  if (currentPage <= 1 || isAnimating) {
-    return;
-  }
-
-  currentPage -= 1;
-  updatePage("previous");
+  turnToPage(currentPage - 1, "previous");
 }
+
+/* 键盘操作 */
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") {
@@ -76,6 +99,8 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+/* 手机左右滑动 */
+
 let touchStartX = 0;
 
 document.addEventListener(
@@ -89,8 +114,11 @@ document.addEventListener(
 document.addEventListener(
   "touchend",
   (event) => {
-    const touchEndX = event.changedTouches[0].clientX;
-    const distance = touchEndX - touchStartX;
+    const touchEndX =
+      event.changedTouches[0].clientX;
+
+    const distance =
+      touchEndX - touchStartX;
 
     if (Math.abs(distance) < 50) {
       return;
