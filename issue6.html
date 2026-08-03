@@ -1,36 +1,75 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <title>Issue 06</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Issue 06</title>
-
-
-<link rel="stylesheet" href="style.css">
-
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
+<body class="issue-page">
 
-<body>
+  <main class="reader">
 
+    <button
+      class="home-button"
+      type="button"
+      aria-label="Back to archive"
+      onclick="window.location.href='index.html'"
+    >
+      ←
+    </button>
 
-<div class="page">
+    <button
+      class="click-zone click-zone-left"
+      type="button"
+      aria-label="Previous page"
+      onclick="previousPage()"
+    ></button>
 
+    <div class="page-stage" id="pageStage">
+      <img
+        id="magazinePage"
+        src="images/issue06-page01.jpg"
+        alt="Issue 06 page 1"
+      >
+    </div>
 
-<img src="images/issue06-page01.jpg">
+    <button
+      class="click-zone click-zone-right"
+      type="button"
+      aria-label="Next page"
+      onclick="nextPage()"
+    ></button>
 
+    <button
+      class="nav-button previous-button"
+      type="button"
+      aria-label="Previous page"
+      onclick="previousPage()"
+    >
+      ←
+    </button>
 
-</div>
+    <button
+      class="nav-button next-button"
+      type="button"
+      aria-label="Next page"
+      onclick="nextPage()"
+    >
+      →
+    </button>
 
+    <div class="page-counter" id="pageCounter">
+      01 / 05
+    </div>
 
+  </main>
+
+  <script src="issue6.js"></script>
 </body>
-
 
 </html>
