@@ -1,17 +1,11 @@
 :root {
-  /*
-    横版封面尺寸。
-    如果你的封面比例接近 16:9，这个比例比较合适。
-  */
-  --stack-width: clamp(210px, 22vw, 370px);
-  --stack-ratio: 0.625;
-  --stack-height:
-    calc(var(--stack-width) * var(--stack-ratio));
+  --card-width: clamp(220px, 27vw, 430px);
+  --carousel-radius: clamp(330px, 34vw, 580px);
 }
 
-/* ==============================
+/* =========================
    基础
-============================== */
+========================= */
 
 * {
   margin: 0;
@@ -19,456 +13,333 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
   width: 100%;
-  min-height: 100%;
-  background: #000;
+  height: 100%;
 }
 
 body {
-  width: 100%;
-  min-height: 100%;
+  overflow: hidden;
+
   background: #000;
   color: #fff;
+
   font-family:
     Arial,
     Helvetica,
     sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+button {
+  font: inherit;
 }
 
 img {
   display: block;
 }
 
-/* ==============================
-   首页
-============================== */
+/* =========================
+   黑色空间
+========================= */
 
-.archive-page {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.archive-scene {
+.archive {
   position: relative;
 
   width: 100vw;
   height: 100vh;
 
   overflow: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(35, 35, 35, 0.62) 0%,
+      rgba(10, 10, 10, 0.88) 45%,
+      #000 82%
+    );
+
+  user-select: none;
+  cursor: grab;
+}
+
+.archive.is-dragging {
+  cursor: grabbing;
+}
+
+/* 空间轻微光晕 */
+
+.archive::before {
+  content: "";
+
+  position: absolute;
+  inset: -20%;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.035),
+      transparent 52%
+    );
+
+  filter: blur(30px);
+}
+
+/* =========================
+   3D 场景
+========================= */
+
+.scene {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   perspective: 1800px;
   perspective-origin: 50% 50%;
 
   transform-style: preserve-3d;
 
-  background:
-    radial-gradient(
-      ellipse at 50% 48%,
-      rgba(35, 35, 35, 0.48) 0%,
-      rgba(10, 10, 10, 0.86) 48%,
-      #000 82%
-    );
-
   transition:
-    transform 0.16s ease-out;
+    perspective 0.35s ease;
 }
 
-/* 每叠海报的位置容器 */
-
-.stack-position {
-  position: absolute;
-
-  width: var(--stack-width);
-  height: var(--stack-height);
-
-  transform-style: preserve-3d;
-}
-
-/* 海报堆本体 */
-
-.poster-stack {
+.carousel {
   position: relative;
 
-  width: 100%;
-  height: 100%;
+  width: var(--card-width);
+  height: calc(var(--card-width) * 0.63);
 
-  opacity: 0;
+  transform-style: preserve-3d;
+
+  transform:
+    rotateX(-8deg)
+    rotateY(0deg);
+
+  will-change: transform;
+}
+
+/* =========================
+   封面
+========================= */
+
+.magazine-card {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: var(--card-width);
 
   transform-style: preserve-3d;
   transform-origin: center center;
 
+  opacity: 0;
+
+  transform:
+    translate(-50%, -50%)
+    rotateY(var(--card-angle))
+    translateZ(0)
+    scale(0.08);
+
   animation:
-    stackEntrance 1.35s forwards;
+    cardExpand 1.35s
+    cubic-bezier(0.18, 0.82, 0.2, 1)
+    forwards;
 
   transition:
-    transform 0.65s
-      cubic-bezier(0.2, 0.72, 0.2, 1),
-    filter 0.4s ease,
-    opacity 0.45s ease;
+    opacity 0.65s ease,
+    filter 0.55s ease;
+
+  cursor: pointer;
+
+  outline: none;
+  will-change: transform, opacity;
 }
 
-/* 封面 */
-
-.stack-cover {
-  position: absolute;
-  inset: 0;
-
-  z-index: 10;
-
-  overflow: hidden;
-
-  background: #111;
-
-  transform:
-    translateZ(6px);
-
-  backface-visibility: hidden;
-
-  box-shadow:
-    0 30px 75px rgba(0, 0, 0, 0.72),
-    0 0 1px rgba(255, 255, 255, 0.35);
+.magazine-card:nth-child(1) {
+  animation-delay: 0.04s;
 }
 
-.stack-cover img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
-  user-select: none;
-  -webkit-user-drag: none;
+.magazine-card:nth-child(2) {
+  animation-delay: 0.12s;
 }
 
-/*
-  纸张层不会覆盖封面。
-  每层只是向右下方露出少量边缘。
-*/
-
-.paper-layer {
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      135deg,
-      #fafafa 0%,
-      #d9d9d9 100%
-    );
-
-  border:
-    1px solid rgba(0, 0, 0, 0.18);
-
-  pointer-events: none;
+.magazine-card:nth-child(3) {
+  animation-delay: 0.2s;
 }
 
-/* 越下面的纸张，偏移越大 */
-
-.layer-01 {
-  z-index: 9;
-
-  transform:
-    translate3d(2px, 2px, 4px);
+.magazine-card:nth-child(4) {
+  animation-delay: 0.28s;
 }
 
-.layer-02 {
-  z-index: 8;
-
-  transform:
-    translate3d(5px, 5px, 2px);
+.magazine-card:nth-child(5) {
+  animation-delay: 0.36s;
 }
 
-.layer-03 {
-  z-index: 7;
-
-  transform:
-    translate3d(8px, 8px, 0);
+.magazine-card:nth-child(6) {
+  animation-delay: 0.44s;
 }
 
-.layer-04 {
-  z-index: 6;
+/* 从中心向外展开 */
 
-  transform:
-    translate3d(11px, 11px, -2px);
-
-  box-shadow:
-    10px 12px 35px
-    rgba(0, 0, 0, 0.5);
-}
-
-/* 出现动画 */
-
-@keyframes stackEntrance {
+@keyframes cardExpand {
   0% {
     opacity: 0;
 
-    filter: blur(7px);
-
     transform:
-      translateZ(-650px)
-      scale(0.3)
-      rotateX(12deg)
-      rotateY(28deg);
+      translate(-50%, -50%)
+      rotateY(var(--card-angle))
+      translateZ(0)
+      scale(0.08);
   }
 
-  70% {
+  55% {
     opacity: 1;
   }
 
   100% {
     opacity: 1;
-    filter: blur(0);
+
+    transform:
+      translate(-50%, -50%)
+      rotateY(var(--card-angle))
+      translateZ(var(--carousel-radius))
+      scale(1);
   }
 }
 
-/* ==============================
-   六期布局
-============================== */
+/* 图片按原始比例完整显示 */
 
-.position-01 {
-  left: 5%;
-  top: 21%;
+.card-image {
+  position: relative;
 
-  z-index: 3;
+  width: 100%;
 
-  transform:
-    translateZ(-100px);
+  overflow: hidden;
+
+  background: #0b0b0b;
+
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.8),
+    0 0 1px rgba(255, 255, 255, 0.32);
+
+  transition:
+    filter 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s ease;
 }
 
-.stack-01 {
-  transform:
-    rotateX(-2deg)
-    rotateY(8deg)
-    rotateZ(-7deg);
+.card-image img {
+  width: 100%;
+  height: auto;
 
-  animation-delay: 0.05s;
+  pointer-events: none;
+
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-.position-02 {
-  left: 34%;
-  top: 7%;
+/* 鼠标经过 */
 
-  z-index: 2;
+.magazine-card:hover .card-image {
+  filter: brightness(1.12);
 
-  transform:
-    translateZ(-190px);
+  box-shadow:
+    0 45px 115px rgba(0, 0, 0, 0.9),
+    0 0 28px rgba(255, 255, 255, 0.1);
 }
 
-.stack-02 {
-  transform:
-    rotateX(2deg)
-    rotateY(-7deg)
-    rotateZ(5deg);
-
-  animation-delay: 0.17s;
-}
-
-.position-03 {
-  right: 5%;
-  top: 18%;
-
-  z-index: 4;
-
-  transform:
-    translateZ(-60px);
-}
-
-.stack-03 {
-  transform:
-    rotateX(-2deg)
-    rotateY(-8deg)
-    rotateZ(6deg);
-
-  animation-delay: 0.29s;
-}
-
-.position-04 {
-  right: 7%;
-  bottom: 9%;
-
-  z-index: 2;
-
-  transform:
-    translateZ(-140px);
-}
-
-.stack-04 {
-  transform:
-    rotateX(2deg)
-    rotateY(7deg)
-    rotateZ(-6deg);
-
-  animation-delay: 0.41s;
-}
-
-.position-05 {
-  left: 22%;
-  bottom: 8%;
-
-  z-index: 5;
-
-  transform:
-    translateZ(-20px);
-}
-
-.stack-05 {
-  transform:
-    rotateX(-2deg)
-    rotateY(6deg)
-    rotateZ(5deg);
-
-  animation-delay: 0.53s;
-}
-
-.position-06 {
-  left: 43%;
-  top: 37%;
-
-  z-index: 10;
-
-  transform:
-    translateZ(80px);
-}
-
-.stack-06 {
-  cursor: pointer;
-
-  transform:
-    rotateX(-1deg)
-    rotateY(-5deg)
-    rotateZ(-1deg);
-
-  animation-delay: 0.65s;
-}
-
-.stack-06:hover {
-  filter: brightness(1.08);
-
-  transform:
-    translateZ(80px)
-    scale(1.06)
-    rotateX(0deg)
-    rotateY(0deg)
-    rotateZ(0deg);
-}
-
-.stack-06:focus-visible {
-  outline:
-    2px solid #fff;
-
+.magazine-card:focus-visible .card-image {
+  outline: 2px solid #fff;
   outline-offset: 8px;
 }
 
-/* ==============================
-   点击第六期
-============================== */
+/* =========================
+   抽出封面
+========================= */
 
-.archive-scene.is-opening {
-  transform: none !important;
-}
+/*
+  选中后，JS 会把封面暂时移入 fixed overlay 状态。
+*/
 
-.archive-scene.is-opening
-.stack-position:not(.position-06) {
-  pointer-events: none;
-}
-
-.archive-scene.is-opening
-.stack-position:not(.position-06)
-.poster-stack {
-  opacity: 0;
-
-  filter: blur(10px);
-
-  transform:
-    translateZ(-350px)
-    scale(0.78);
-}
-
-.position-06.is-opening-stack {
+.magazine-card.is-selected {
   position: fixed;
 
   left: 50%;
   top: 50%;
 
-  z-index: 1000;
+  z-index: 500;
+
+  opacity: 1;
+
+  animation: none;
 
   transform:
     translate(-50%, -50%)
-    translateZ(520px);
-}
-
-.position-06.is-opening-stack
-.stack-06 {
-  animation: none;
-  opacity: 1;
-
-  transform:
-    scale(2.15)
+    translateZ(0)
     rotateX(0deg)
     rotateY(0deg)
-    rotateZ(0deg);
+    rotateZ(0deg)
+    scale(1.35) !important;
 
   transition:
     transform 0.85s
-      cubic-bezier(0.22, 0.78, 0.2, 1);
+      cubic-bezier(0.2, 0.78, 0.2, 1),
+    opacity 0.5s ease,
+    filter 0.5s ease;
 }
 
-/* ==============================
-   第六期长图阅读
-============================== */
-
-.issue-page {
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  background:
-    linear-gradient(
-      to bottom,
-      #050505 0%,
-      #000 100%
-    );
-}
-
-/* 固定顶部导航 */
-
-.issue-header {
-  position: fixed;
-
-  left: 0;
-  top: 0;
-
-  z-index: 100;
-
-  width: 100%;
-  height: 72px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding:
-    0 28px;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.9),
-      rgba(0, 0, 0, 0)
-    );
+.archive.has-selection
+.magazine-card:not(.is-selected) {
+  opacity: 0.12;
+  filter: blur(8px) brightness(0.35);
 
   pointer-events: none;
 }
 
-.back-link {
-  width: 46px;
-  height: 46px;
+.archive.has-selection .carousel {
+  transition:
+    transform 0.8s
+      cubic-bezier(0.2, 0.78, 0.2, 1);
+}
+
+/* 再次点击第六期时的展开 */
+
+.magazine-card.is-entering {
+  transform:
+    translate(-50%, -50%)
+    scale(3.8) !important;
+
+  opacity: 0;
+
+  transition:
+    transform 0.8s
+      cubic-bezier(0.22, 0.8, 0.2, 1),
+    opacity 0.72s ease;
+}
+
+/* =========================
+   关闭按钮
+========================= */
+
+.close-selection {
+  position: fixed;
+
+  right: 28px;
+  top: 28px;
+
+  z-index: 800;
+
+  width: 48px;
+  height: 48px;
 
   display: flex;
   align-items: center;
@@ -480,199 +351,114 @@ img {
   border-radius: 50%;
 
   background:
-    rgba(0, 0, 0, 0.42);
+    rgba(0, 0, 0, 0.46);
 
-  font-size: 22px;
+  color: #fff;
 
-  pointer-events: auto;
+  font-size: 27px;
+  line-height: 1;
 
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
   transition:
-    background 0.22s ease,
-    color 0.22s ease,
-    transform 0.22s ease;
+    opacity 0.3s ease,
+    visibility 0.3s ease,
+    transform 0.3s ease,
+    background 0.25s ease,
+    color 0.25s ease;
 }
 
-.back-link:hover {
+.archive.has-selection
+.close-selection {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.close-selection:hover {
   color: #000;
   background: #fff;
-
-  transform:
-    scale(1.06);
 }
 
-.issue-label {
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  color:
-    rgba(255, 255, 255, 0.72);
-}
+/* =========================
+   提示文字
+========================= */
 
-/* 长页面容器 */
+.instruction {
+  position: fixed;
 
-.longform-reader {
-  width: 100%;
+  left: 50%;
+  bottom: 24px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  z-index: 100;
 
-  padding:
-    110px 0 80px;
-}
-
-/* 首屏封面 */
-
-.reader-cover-section {
-  width: min(92vw, 1500px);
-
-  margin-bottom: 80px;
-
-  display: flex;
-  justify-content: center;
-
-  min-height: calc(100vh - 150px);
-}
-
-.reader-cover-section img {
-  width: 100%;
-  height: auto;
-
-  object-fit: contain;
-
-  align-self: center;
-
-  box-shadow:
-    0 35px 100px rgba(0, 0, 0, 0.65);
-}
-
-/* 后续每一页 */
-
-.reader-page {
-  width: min(92vw, 1500px);
-
-  margin-bottom: 48px;
-
-  display: flex;
-  justify-content: center;
-
-  scroll-margin-top: 40px;
-}
-
-.reader-page img {
-  width: 100%;
-  height: auto;
-
-  object-fit: contain;
-
-  background: #111;
-
-  box-shadow:
-    0 30px 85px rgba(0, 0, 0, 0.58);
-}
-
-/* 结尾 */
-
-.issue-footer {
-  padding:
-    70px 20px 20px;
+  transform: translateX(-50%);
 
   color:
-    rgba(255, 255, 255, 0.45);
+    rgba(255, 255, 255, 0.52);
 
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.18em;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.35s ease;
 }
 
-/* ==============================
-   手机适配
-============================== */
+.archive.has-selection .instruction {
+  opacity: 0;
+}
+
+/* =========================
+   手机
+========================= */
 
 @media (max-width: 800px) {
   :root {
-    --stack-width:
-      clamp(135px, 38vw, 220px);
+    --card-width:
+      clamp(150px, 46vw, 250px);
+
+    --carousel-radius:
+      clamp(210px, 60vw, 330px);
   }
 
-  .position-01 {
-    left: 1%;
-    top: 21%;
-  }
-
-  .position-02 {
-    left: 32%;
-    top: 8%;
-  }
-
-  .position-03 {
-    right: 1%;
-    top: 25%;
-  }
-
-  .position-04 {
-    right: 1%;
-    bottom: 13%;
-  }
-
-  .position-05 {
-    left: 15%;
-    bottom: 9%;
-  }
-
-  .position-06 {
-    left: 39%;
-    top: 42%;
-  }
-
-  .position-06.is-opening-stack
-  .stack-06 {
+  .carousel {
     transform:
-      scale(2.45)
-      rotateX(0deg)
+      rotateX(-6deg)
       rotateY(0deg);
   }
 
-  .issue-header {
-    height: 62px;
-    padding:
-      0 12px;
+  .magazine-card.is-selected {
+    transform:
+      translate(-50%, -50%)
+      scale(1.65) !important;
   }
 
-  .back-link {
-    width: 42px;
-    height: 42px;
-  }
+  .close-selection {
+    right: 12px;
+    top: 12px;
 
-  .longform-reader {
-    padding:
-      88px 0 50px;
-  }
-
-  .reader-cover-section,
-  .reader-page {
-    width: 96vw;
-  }
-
-  .reader-cover-section {
-    min-height: auto;
-    margin-bottom: 32px;
-  }
-
-  .reader-page {
-    margin-bottom: 20px;
+    width: 44px;
+    height: 44px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .poster-stack,
-  .archive-scene {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  .poster-stack {
+  .magazine-card {
+    animation: none;
     opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      rotateY(var(--card-angle))
+      translateZ(var(--carousel-radius));
   }
 }
