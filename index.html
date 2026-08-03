@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
 
@@ -14,130 +13,49 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="archive-page">
 
-  <main class="archive" id="archive">
+  <main id="archive">
+    <canvas id="webgl"></canvas>
 
-    <div class="scene" id="scene">
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-text">LOADING ARCHIVE</div>
+      <div class="loading-line">
+        <div class="loading-progress" id="loadingProgress"></div>
+      </div>
+    </div>
 
-      <div class="carousel" id="carousel">
-
-        <article
-          class="magazine-card"
-          data-index="0"
-          data-issue="1"
-          style="--card-angle: 0deg;"
-          tabindex="0"
-        >
-          <div class="card-image">
-            <img
-              src="images/cover01.jpg"
-              alt="Issue 01"
-              draggable="false"
-            >
-          </div>
-        </article>
-
-        <article
-          class="magazine-card"
-          data-index="1"
-          data-issue="2"
-          style="--card-angle: 60deg;"
-          tabindex="0"
-        >
-          <div class="card-image">
-            <img
-              src="images/cover02.jpg"
-              alt="Issue 02"
-              draggable="false"
-            >
-          </div>
-        </article>
-
-        <article
-          class="magazine-card"
-          data-index="2"
-          data-issue="3"
-          style="--card-angle: 120deg;"
-          tabindex="0"
-        >
-          <div class="card-image">
-            <img
-              src="images/cover03.jpg"
-              alt="Issue 03"
-              draggable="false"
-            >
-          </div>
-        </article>
-
-        <article
-          class="magazine-card"
-          data-index="3"
-          data-issue="4"
-          style="--card-angle: 180deg;"
-          tabindex="0"
-        >
-          <div class="card-image">
-            <img
-              src="images/cover04.jpg"
-              alt="Issue 04"
-              draggable="false"
-            >
-          </div>
-        </article>
-
-        <article
-          class="magazine-card"
-          data-index="4"
-          data-issue="5"
-          style="--card-angle: 240deg;"
-          tabindex="0"
-        >
-          <div class="card-image">
-            <img
-              src="images/cover05.jpg"
-              alt="Issue 05"
-              draggable="false"
-            >
-          </div>
-        </article>
-
-        <article
-          class="magazine-card"
-          data-index="5"
-          data-issue="6"
-          style="--card-angle: 300deg;"
-          tabindex="0"
-        >
-          <div class="card-image">
-            <img
-              src="images/cover06.jpg"
-              alt="Issue 06"
-              draggable="false"
-            >
-          </div>
-        </article>
-
+    <div class="archive-interface">
+      <div class="archive-title">
+        X-CHAT ARCHIVE
       </div>
 
+      <div class="archive-hint" id="archiveHint">
+        DRAG TO ROTATE · CLICK TO SELECT
+      </div>
+
+      <button
+        class="close-button"
+        id="closeButton"
+        type="button"
+        aria-label="Close selected issue"
+      >
+        ×
+      </button>
+
+      <div class="selected-information" id="selectedInformation">
+        <span id="selectedIssue">ISSUE 06</span>
+        <span class="selected-action" id="selectedAction">
+          CLICK AGAIN TO OPEN
+        </span>
+      </div>
     </div>
-
-    <button
-      class="close-selection"
-      id="closeSelection"
-      type="button"
-      aria-label="Return to archive"
-    >
-      ×
-    </button>
-
-    <div class="instruction" id="instruction">
-      DRAG TO ROTATE
-    </div>
-
   </main>
 
-  <script src="script.js"></script>
-</body>
+  <script
+    type="module"
+    src="script.js"
+  ></script>
 
+</body>
 </html>
