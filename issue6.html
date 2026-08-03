@@ -16,87 +16,77 @@
 
 <body class="issue-page">
 
-  <main class="magazine-reader">
+  <header class="issue-header">
 
-    <!-- 返回首页 -->
-    <button
-      class="reader-home-button"
-      type="button"
+    <a
+      class="back-link"
+      href="index.html"
       aria-label="Back to archive"
-      onclick="window.location.href='index.html'"
     >
       ←
-    </button>
+    </a>
 
-    <!-- 左侧点击区域 -->
-    <button
-      class="page-click-area page-click-left"
-      type="button"
-      aria-label="Previous page"
-      onclick="previousPage()"
-    ></button>
+    <div class="issue-label">
+      ISSUE 06
+    </div>
 
-    <!-- 杂志页 -->
-    <section class="page-frame">
+  </header>
 
-      <div class="page-book">
+  <main class="longform-reader">
 
-        <!-- 纸张厚度 -->
-        <div class="reader-page-stack"></div>
-
-        <div
-          class="turning-page"
-          id="turningPage"
-        >
-          <img
-            id="magazineImage"
-            src="images/issue06-page01.jpg"
-            alt="Issue 06 page 1"
-          >
-        </div>
-
-      </div>
-
+    <section class="reader-cover-section">
+      <img
+        src="images/cover06.jpg"
+        alt="Issue 06 cover"
+      >
     </section>
 
-    <!-- 右侧点击区域 -->
-    <button
-      class="page-click-area page-click-right"
-      type="button"
-      aria-label="Next page"
-      onclick="nextPage()"
-    ></button>
+    <section class="reader-page">
+      <img
+        src="images/issue06-page01.jpg"
+        alt="Issue 06 page 1"
+        loading="eager"
+      >
+    </section>
 
-    <!-- 左右按钮 -->
-    <button
-      class="reader-nav-button reader-previous"
-      type="button"
-      aria-label="Previous page"
-      onclick="previousPage()"
-    >
-      ←
-    </button>
+    <section class="reader-page">
+      <img
+        src="images/issue06-page02.jpg"
+        alt="Issue 06 page 2"
+        loading="lazy"
+      >
+    </section>
 
-    <button
-      class="reader-nav-button reader-next"
-      type="button"
-      aria-label="Next page"
-      onclick="nextPage()"
-    >
-      →
-    </button>
+    <section class="reader-page">
+      <img
+        src="images/issue06-page03.jpg"
+        alt="Issue 06 page 3"
+        loading="lazy"
+      >
+    </section>
 
-    <!-- 页码 -->
-    <div
-      class="reader-page-number"
-      id="pageNumber"
-    >
-      01 / 05
-    </div>
+    <section class="reader-page">
+      <img
+        src="images/issue06-page04.jpg"
+        alt="Issue 06 page 4"
+        loading="lazy"
+      >
+    </section>
+
+    <section class="reader-page">
+      <img
+        src="images/issue06-page05.jpg"
+        alt="Issue 06 page 5"
+        loading="lazy"
+      >
+    </section>
+
+    <footer class="issue-footer">
+      END OF ISSUE 06
+    </footer>
 
   </main>
 
-  <script src="issue6.js"></script>
 </body>
 
 </html>
