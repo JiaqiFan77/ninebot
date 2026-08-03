@@ -2,62 +2,148 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<title>Magazine Archive</title>
+  <title>Magazine Archive</title>
 
-<link rel="stylesheet" href="style.css">
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
+<body class="archive-page">
 
-<body>
+  <main class="archive-space" id="archiveSpace">
 
+    <!-- ISSUE 01 -->
+    <div class="book-position position-01">
+      <article class="book book-01">
 
-<div class="space" id="space">
+        <div class="book-cover">
+          <img
+            src="images/cover01.jpg"
+            alt="Issue 01 cover"
+          >
+        </div>
 
+        <div class="book-spine"></div>
+        <div class="book-pages-right"></div>
+        <div class="book-pages-top"></div>
+        <div class="book-pages-bottom"></div>
 
-<div class="mag cover01">
-<img src="images/cover01.jpg">
-</div>
+      </article>
+    </div>
 
+    <!-- ISSUE 02 -->
+    <div class="book-position position-02">
+      <article class="book book-02">
 
-<div class="mag cover02">
-<img src="images/cover02.jpg">
-</div>
+        <div class="book-cover">
+          <img
+            src="images/cover02.jpg"
+            alt="Issue 02 cover"
+          >
+        </div>
 
+        <div class="book-spine"></div>
+        <div class="book-pages-right"></div>
+        <div class="book-pages-top"></div>
+        <div class="book-pages-bottom"></div>
 
-<div class="mag cover03">
-<img src="images/cover03.jpg">
-</div>
+      </article>
+    </div>
 
+    <!-- ISSUE 03 -->
+    <div class="book-position position-03">
+      <article class="book book-03">
 
-<div class="mag cover04">
-<img src="images/cover04.jpg">
-</div>
+        <div class="book-cover">
+          <img
+            src="images/cover03.jpg"
+            alt="Issue 03 cover"
+          >
+        </div>
 
+        <div class="book-spine"></div>
+        <div class="book-pages-right"></div>
+        <div class="book-pages-top"></div>
+        <div class="book-pages-bottom"></div>
 
-<div class="mag cover05">
-<img src="images/cover05.jpg">
-</div>
+      </article>
+    </div>
 
+    <!-- ISSUE 04 -->
+    <div class="book-position position-04">
+      <article class="book book-04">
 
+        <div class="book-cover">
+          <img
+            src="images/cover04.jpg"
+            alt="Issue 04 cover"
+          >
+        </div>
 
-<div class="mag cover06" onclick="openIssue()">
+        <div class="book-spine"></div>
+        <div class="book-pages-right"></div>
+        <div class="book-pages-top"></div>
+        <div class="book-pages-bottom"></div>
 
-<img src="images/cover06.jpg">
+      </article>
+    </div>
 
-</div>
+    <!-- ISSUE 05 -->
+    <div class="book-position position-05">
+      <article class="book book-05">
 
+        <div class="book-cover">
+          <img
+            src="images/cover05.jpg"
+            alt="Issue 05 cover"
+          >
+        </div>
 
-</div>
+        <div class="book-spine"></div>
+        <div class="book-pages-right"></div>
+        <div class="book-pages-top"></div>
+        <div class="book-pages-bottom"></div>
 
+      </article>
+    </div>
 
-<script src="script.js"></script>
+    <!-- ISSUE 06：可点击 -->
+    <div
+      class="book-position position-06"
+      id="issue06Position"
+    >
+      <article
+        class="book book-06"
+        id="issue06Book"
+        role="button"
+        tabindex="0"
+        aria-label="Open Issue 06"
+      >
 
+        <div class="book-cover">
+          <img
+            src="images/cover06.jpg"
+            alt="Issue 06 cover"
+          >
+        </div>
 
+        <div class="book-spine"></div>
+        <div class="book-pages-right"></div>
+        <div class="book-pages-top"></div>
+        <div class="book-pages-bottom"></div>
+
+      </article>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
 </body>
 
 </html>
