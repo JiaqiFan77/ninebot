@@ -1,92 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Issue 06</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body class="issue-page">
-
   <header class="issue-header">
-
-    <a
-      class="back-link"
-      href="index.html"
-      aria-label="Back to archive"
-    >
-      ←
-    </a>
-
-    <div class="issue-label">
-      ISSUE 06
-    </div>
-
+    <a class="back" href="index.html" aria-label="Back to archive">←</a>
+    <div class="issue-header__label">ISSUE 06</div>
   </header>
 
-  <main class="longform-reader">
-
-    <section class="reader-cover-section">
-      <img
-        src="images/cover06.jpg"
-        alt="Issue 06 cover"
-      >
+  <main class="reader">
+    <section class="reader__item reader__cover">
+      <img src="images/cover06.jpg" alt="Issue 06 cover">
     </section>
 
-    <section class="reader-page">
-      <img
-        src="images/issue06-page01.jpg"
-        alt="Issue 06 page 1"
-        loading="eager"
-      >
-    </section>
+    <section class="reader__item"><img src="images/issue06-page01.jpg" alt="Issue 06 page 1"></section>
+    <section class="reader__item"><img src="images/issue06-page02.jpg" alt="Issue 06 page 2" loading="lazy"></section>
+    <section class="reader__item"><img src="images/issue06-page03.jpg" alt="Issue 06 page 3" loading="lazy"></section>
+    <section class="reader__item"><img src="images/issue06-page04.jpg" alt="Issue 06 page 4" loading="lazy"></section>
+    <section class="reader__item"><img src="images/issue06-page05.jpg" alt="Issue 06 page 5" loading="lazy"></section>
 
-    <section class="reader-page">
-      <img
-        src="images/issue06-page02.jpg"
-        alt="Issue 06 page 2"
-        loading="lazy"
-      >
-    </section>
-
-    <section class="reader-page">
-      <img
-        src="images/issue06-page03.jpg"
-        alt="Issue 06 page 3"
-        loading="lazy"
-      >
-    </section>
-
-    <section class="reader-page">
-      <img
-        src="images/issue06-page04.jpg"
-        alt="Issue 06 page 4"
-        loading="lazy"
-      >
-    </section>
-
-    <section class="reader-page">
-      <img
-        src="images/issue06-page05.jpg"
-        alt="Issue 06 page 5"
-        loading="lazy"
-      >
-    </section>
-
-    <footer class="issue-footer">
-      END OF ISSUE 06
-    </footer>
-
+    <footer class="reader__end">END OF ISSUE 06</footer>
   </main>
-
 </body>
-
 </html>
