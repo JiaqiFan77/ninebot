@@ -1,57 +1,42 @@
-const issue=document.querySelector(".cover06");
+const space = document.getElementById("space");
+const issueCover = document.querySelector(".cover06");
 
+let isOpening = false;
 
-function openIssue(){
+function openIssue() {
+  if (isOpening) {
+    return;
+  }
 
+  isOpening = true;
 
-issue.classList.add("open");
+  space.classList.add("is-opening");
+  issueCover.classList.add("open");
 
-
-
-setTimeout(()=>{
-
-
-window.location.href="issue6.html";
-
-
-},1200);
-
-
-
+  window.setTimeout(() => {
+    window.location.href = "issue6.html";
+  }, 1050);
 }
 
+document.addEventListener("mousemove", (event) => {
+  if (isOpening || !space) {
+    return;
+  }
 
+  const rotateY =
+    (event.clientX / window.innerWidth - 0.5) * 14;
 
+  const rotateX =
+    (event.clientY / window.innerHeight - 0.5) * -10;
 
-// 鼠标空间移动
+  space.style.transform =
+    `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
 
+document.addEventListener("mouseleave", () => {
+  if (!space || isOpening) {
+    return;
+  }
 
-document.addEventListener(
-"mousemove",
-(e)=>{
-
-
-let x =
-(e.clientX /
-window.innerWidth
--0.5)*20;
-
-
-
-let y =
-(e.clientY /
-window.innerHeight
--0.5)*20;
-
-
-
-document.querySelector(".space")
-.style.transform=
-`
-rotateX(${-y}deg)
-rotateY(${x}deg)
-`;
-
-
-
+  space.style.transform = "rotateX(0deg) rotateY(0deg)";
 });
