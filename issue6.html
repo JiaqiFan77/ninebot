@@ -3,7 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Issue 06</title>
 
@@ -12,10 +16,11 @@
 
 <body class="issue-page">
 
-  <main class="reader">
+  <main class="magazine-reader">
 
+    <!-- 返回首页 -->
     <button
-      class="home-button"
+      class="reader-home-button"
       type="button"
       aria-label="Back to archive"
       onclick="window.location.href='index.html'"
@@ -23,30 +28,48 @@
       ←
     </button>
 
+    <!-- 左侧点击区域 -->
     <button
-      class="click-zone click-zone-left"
+      class="page-click-area page-click-left"
       type="button"
       aria-label="Previous page"
       onclick="previousPage()"
     ></button>
 
-    <div class="page-stage" id="pageStage">
-      <img
-        id="magazinePage"
-        src="images/issue06-page01.jpg"
-        alt="Issue 06 page 1"
-      >
-    </div>
+    <!-- 杂志页 -->
+    <section class="page-frame">
 
+      <div class="page-book">
+
+        <!-- 纸张厚度 -->
+        <div class="reader-page-stack"></div>
+
+        <div
+          class="turning-page"
+          id="turningPage"
+        >
+          <img
+            id="magazineImage"
+            src="images/issue06-page01.jpg"
+            alt="Issue 06 page 1"
+          >
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 右侧点击区域 -->
     <button
-      class="click-zone click-zone-right"
+      class="page-click-area page-click-right"
       type="button"
       aria-label="Next page"
       onclick="nextPage()"
     ></button>
 
+    <!-- 左右按钮 -->
     <button
-      class="nav-button previous-button"
+      class="reader-nav-button reader-previous"
       type="button"
       aria-label="Previous page"
       onclick="previousPage()"
@@ -55,7 +78,7 @@
     </button>
 
     <button
-      class="nav-button next-button"
+      class="reader-nav-button reader-next"
       type="button"
       aria-label="Next page"
       onclick="nextPage()"
@@ -63,7 +86,11 @@
       →
     </button>
 
-    <div class="page-counter" id="pageCounter">
+    <!-- 页码 -->
+    <div
+      class="reader-page-number"
+      id="pageNumber"
+    >
       01 / 05
     </div>
 
